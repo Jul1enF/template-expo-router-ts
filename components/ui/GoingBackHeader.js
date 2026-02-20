@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 import { RPH, RPW, phoneDevice } from '@utils/dimensions.js'
-import { appStyle } from '@styles/appStyle.js';
+import { appStyle } from '@styles/appStyle.ts';
 
 export default function GoingBackHeader({back, previousPage, previousPageName, leftFunction }) {
 const router = useRouter()

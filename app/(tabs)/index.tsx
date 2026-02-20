@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import {RPH, RPW} from '@utils/dimensions'
 import { appStyle } from '@styles/appStyle';
 
-export default function Home2Page() {
+export default function HomePage() {
   return (
     <View style={styles.container}>
       <Text>Home !</Text>

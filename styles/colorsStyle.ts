@@ -29,4 +29,4 @@ export const colorsStyle = {
     lightGreen: "rgba(0, 173, 0, 1)",
 
     blueLink: "rgb(1, 1, 224)",
-}
+} as const

@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text } from "react-native";
-import { appStyle } from '@styles/appStyle.js';
+import { appStyle } from '@styles/appStyle.ts';
 
 
 export default function Button({ func, text, border, color = appStyle.fontColorDarkBg, fontWeight = "500", style, fontStyle }) {

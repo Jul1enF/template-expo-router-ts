@@ -1,4 +1,5 @@
 import { RPH, RPW, phoneDevice } from '@utils/dimensions'
+import { TextStyle } from 'react-native'
 import { colorsStyle } from "./colorsStyle"
 const { strongBlack, strongRed, darkWhite2, lightGreen } = colorsStyle
 
@@ -9,14 +10,14 @@ export const fontsStyle = {
         fontWeight: '500',
         color: strongBlack,
         textAlign: "center",
-    },
+    } satisfies TextStyle,
     pageSubtitle: {
         fontSize: phoneDevice ? RPW(5.3) : 34,
         letterSpacing: phoneDevice ? RPW(0.5) : 3,
         fontWeight: '500',
         color: strongBlack,
         textAlign: "center",
-    },
+    } satisfies TextStyle,
     labelText: {
         color: strongBlack,
         fontSize: phoneDevice ? RPW(4.65) : 28,
@@ -24,7 +25,7 @@ export const fontsStyle = {
         letterSpacing: phoneDevice ? RPW(0.3) : 1.4,
         lineHeight: phoneDevice ? RPW(6.8) : 40,
         textAlign: "center",
-    },
+    } satisfies TextStyle,
     largeText: {
         color: strongBlack,
         fontSize: phoneDevice ? RPW(4.65) : 28,
@@ -32,7 +33,7 @@ export const fontsStyle = {
         lineHeight: phoneDevice ? RPW(6.8) : 40,
         letterSpacing: phoneDevice ? RPW(0.1) : 1,
         textAlign: "center",
-    },
+    } satisfies TextStyle,
     regularText: {
         color: strongBlack,
         fontSize: phoneDevice ? RPW(4.3) : 26,
@@ -40,19 +41,19 @@ export const fontsStyle = {
         fontWeight: "400",
         letterSpacing: phoneDevice ? RPW(0.15) : 1,
         textAlign: "center",
-    },
+    } satisfies TextStyle,
     secondHeaderText: {
         color: strongBlack,
         fontSize: phoneDevice ? RPW(4.15) : 30,
         lineHeight: phoneDevice ? RPW(5) : 35,
         fontWeight: "500",
-    },
+    } satisfies TextStyle,
     smallText: {
         color: strongBlack,
         fontSize: phoneDevice ? RPW(3.8) : 22,
         fontWeight: "400",
         textAlign: "center",
-    },
+    } satisfies TextStyle,
     warning: {
         fontSize: phoneDevice ? RPW(4.6) : 30,
         letterSpacing: phoneDevice ? 1.5 : 2.5,
@@ -63,10 +64,10 @@ export const fontsStyle = {
         color: strongRed,
         marginTop: phoneDevice ? RPW(3) : 30,
         lineHeight: phoneDevice ? RPW(6) : 38,
-    },
+    } satisfies TextStyle,
     success: {
         color: lightGreen,
-    },
+    } satisfies TextStyle,
 
     // Special font color
     fontColorDarkBg: darkWhite2,

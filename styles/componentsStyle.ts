@@ -1,8 +1,11 @@
 import { RPH, RPW, phoneDevice } from '@utils/dimensions'
+import { ViewStyle, TextStyle } from 'react-native'
 import { colorsStyle } from './colorsStyle'
 import { fontsStyle } from './fontsStyle'
 const { brightGrey, lightGrey, darkWhite, darkGrey } = colorsStyle
 const { regularText } = fontsStyle
+
+
 
 // Sizes called multiple times in this file or called on their own in the app
 const regularItemWidth = phoneDevice ? RPW(67) : 510
@@ -37,14 +40,14 @@ const card = {
     width: (cardHorizontalPadding * 2) + regularItemWidth,
     maxWidth: "100%",
     backgroundColor: darkGrey,
-}
+} satisfies ViewStyle
 
 const largeCard = {
     ...card,
     width: largeItemWidth,
     maxWidth: "100%",
     paddingBottom: phoneDevice ? RPW(12) : 70,
-}
+} satisfies ViewStyle
 
 const regularItem = {
     minHeight: regularItemHeight,
@@ -55,13 +58,13 @@ const regularItem = {
     borderRadius: regularItemBorderRadius,
     marginTop: regularMarginTop,
     paddingHorizontal: regularHorizontalPadding,
-}
+} satisfies ViewStyle
 
 const mediumItemHeight = {
     minHeight: phoneDevice ? RPW(10.8) : 68,
     paddingTop : phoneDevice ? RPW(2) : 14,
     paddingBottom : phoneDevice ? RPW(2) : 14,
-}
+} satisfies ViewStyle
 
 const largeItem = {
     minHeight: largeItemHeight,
@@ -72,19 +75,19 @@ const largeItem = {
     borderRadius: regularItemBorderRadius,
     marginTop: regularMarginTop,
     paddingHorizontal: regularHorizontalPadding,
-}
+} satisfies ViewStyle
 
 const largeCardItem = {
     ...largeItem,
     width: largeCard.width - (cardHorizontalPadding * 2),
     maxWidth: "100%",
-}
+} satisfies ViewStyle
 
 
 const lightGreyBorder = {
     borderColor: lightGrey,
     borderWidth: phoneDevice ? 1.2 : 1.8,
-}
+} satisfies ViewStyle
 
 const inputIconSize = phoneDevice ? RPW(5.2) : 35
 
@@ -101,37 +104,37 @@ export const componentsStyle = {
 
 
     // Components Style
-    pageBody: {
+    pageBody : {
         flex: 1,
         backgroundColor: darkWhite,
         paddingTop: largeMarginTop,
         paddingBottom: pagePaddingBottom,
         alignItems: "center",
-    },
+    } satisfies ViewStyle,
     input: {
         base: {
             ...regularItem,
             ...lightGreyBorder,
             ...regularText,
             textAlign :"left",
-        },
+        } satisfies ViewStyle & TextStyle,
         baseLarge: {
             ...largeItem,
             ...lightGreyBorder,
             ...regularText,
             textAlign :"left",
-        },
+        } satisfies ViewStyle & TextStyle,
         baseLargeCard: {
             ...largeCardItem,
             ...lightGreyBorder,
             ...regularText,
             fontWeight: "700",
             textAlign :"left",
-        },
+        } satisfies ViewStyle & TextStyle,
         withIcon: {
             paddingRight: inputIconSize * 1.8,
             textAlign :"left",
-        }
+        } satisfies TextStyle
     },
     inputIconContainer: {
         position: "absolute",
@@ -141,21 +144,21 @@ export const componentsStyle = {
         width: inputIconSize * 1.8,
         justifyContent: "center",
         alignItems: "flex-end",
-    },
+    } satisfies ViewStyle,
     button: {
         alignItems: "center",
         justifyContent: "center",
-    },
+    } satisfies ViewStyle,
     horizontalLine: {
         height: phoneDevice ? 1.5 : 2,
         backgroundColor: brightGrey,
-    },
+    } satisfies ViewStyle,
 
     // Border width and colors
     secondHeaderBorderBottom: {
         borderBottomColor: lightGrey,
         borderBottomWidth: phoneDevice ? 0.5 : 1.5
-    },
+    } satisfies ViewStyle,
     lightGreyBorder,
 
     // Export of sizes called multiple times in this file or called on their own in the app
