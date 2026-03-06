@@ -6,7 +6,7 @@ const fullScreenHeight = Dimensions.get('screen').height
 const screenWidth = Dimensions.get('window').width
 
 
-export const RPH = (percentage) => {
+export const RPH = (percentage : number) => {
 
     if (Platform.OS === "android") {
         return (percentage / 100) * fullScreenHeight
@@ -16,7 +16,7 @@ export const RPH = (percentage) => {
     }
 };
 
-export const RPW = (percentage) => {
+export const RPW = (percentage : number) => {
     return (percentage / 100) * (screenWidth);
 };
 

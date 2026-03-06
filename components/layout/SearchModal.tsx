@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Modal from "react-native-modal"
@@ -8,8 +8,11 @@ import { appStyle } from "@styles/appStyle";
 import { useRouter } from "expo-router";
 import MyTextInput from "@components/ui/MyTextInput";
 
+type SearchModalProps = {
+    searchVisible : boolean, setSearchVisible : Dispatch<SetStateAction<boolean>>, screenWidth : number, screenHeight : number, modalOffsetTop : number
+}
 
-export default function SearchModal({ searchVisible, setSearchVisible, screenWidth, screenHeight, modalOffsetTop }) {
+export default function SearchModal({ searchVisible, setSearchVisible, screenWidth, screenHeight, modalOffsetTop } : SearchModalProps) {
 
     const [searchText, setSearchText] = useState('')
     const router = useRouter()

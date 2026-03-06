@@ -1,6 +1,11 @@
-import { TextInput, View, StyleSheet, Text, Platform } from "react-native";
-import { useRef, useState } from "react";
+import { TextInput, View, StyleSheet, Text, Platform, ViewStyle, TextStyle, TextInputProps } from "react-native";
+import { RefObject, useRef, useState, ReactNode } from "react";
 import { appStyle } from "@styles/appStyle";
+
+
+type MyTextInputProps = TextInputProps & {
+    style? : ViewStyle & TextStyle, inputRef? : RefObject<TextInput> | null, children : ReactNode
+}
 
 export default function MyTextInput({
     style,
@@ -19,9 +24,9 @@ export default function MyTextInput({
     editable = true,
     inputRef = null,
     children,
-}) {
+} : MyTextInputProps) {
 
-    const styleObject = StyleSheet.flatten(style) ?? {}
+    const styleObject : ViewStyle & TextStyle = StyleSheet.flatten(style) ?? {}
 
     const { minHeight, paddingTop, paddingBottom, width, height, maxHeight, maxWidth, borderRadius, marginTop, paddingHorizontal, borderColor, borderWidth, borderBottomWidth, borderBottomColor, backgroundColor, paddingLeft, paddingRight, ...fontStyle } = styleObject
 
@@ -29,11 +34,11 @@ export default function MyTextInput({
     const lineHeight = Math.round(fontSize * 1.25);
 
     // Break the text of the placeHolder anywhere
-    const breakLongWords = (text) =>
+    const breakLongWords = (text : string) =>
         text.toString().replace(/(.{5})/g, "$1\u200B")
 
     // Conditionnal ref
-    const internalRef = useRef(null);
+    const internalRef = useRef<TextInput>(null);
     const finalInputRef = inputRef ?? internalRef;
 
     // Registration of the focus state
@@ -41,7 +46,8 @@ export default function MyTextInput({
 
     // On android we display a text overlay so when the input is not focused, the text start from the left
     const android = Platform.OS === "android"
-    const showTextOverlay = android && !isFocus && value
+    // const showTextOverlay : boolean = android && !isFocus && value.length !== 0
+    const showTextOverlay = !!(android && !isFocus && value)
     // There is an automatic text input padding (in addition to the one in style) on android
     const textInputInset = android ? 1.5 : 0
 
@@ -57,8 +63,8 @@ export default function MyTextInput({
                 width: width ?? "100%",
                 zIndex: 1,
                 justifyContent: "center",
-                paddingLeft: (paddingLeft ?? paddingHorizontal ?? 0) + textInputInset,
-                paddingRight: (paddingRight ?? paddingHorizontal ?? 0) + textInputInset,
+                paddingLeft: (paddingLeft ?? paddingHorizontal ?? 0) as number + textInputInset,
+                paddingRight: (paddingRight ?? paddingHorizontal ?? 0) as number + textInputInset,
                 paddingHorizontal: undefined,
                 pointerEvents: "none",
             }]}
@@ -73,7 +79,6 @@ export default function MyTextInput({
                             fontSize,
                             lineHeight,
                         }]}
-                        multiline={multiline ?? false}
                         numberOfLines={multiline ? undefined : 1}
                     >
                         {placeholder && (multiline ? placeholder : breakLongWords(placeholder))}
@@ -83,11 +88,8 @@ export default function MyTextInput({
                 {/* text starting on it's left on android*/}
                 {showTextOverlay &&
                     <Text
-                        includeFontPadding={false}
-                        textAlignVertical="center"
-                        multiline={multiline ?? false}
                         numberOfLines={multiline ? undefined : 1}
-                        style={{ ...fontStyle, fontSize, lineHeight }}
+                        style={{ ...fontStyle, fontSize, lineHeight, textAlignVertical : "center" }}
                     >
                         {multiline ? value : breakLongWords(value)}
                     </Text>
@@ -99,13 +101,13 @@ export default function MyTextInput({
             <TextInput
                 value={value}
                 onChangeText={onChangeText}
-                onFocus={() => {
+                onFocus={(e) => {
                     android && setIsFocus(true)
-                    typeof onFocus === "function" && onFocus()
+                    typeof onFocus === "function" && onFocus(e)
                 }}
-                onBlur={() => {
+                onBlur={(e) => {
                     android && setIsFocus(false)
-                    typeof onBlur === "function" && onBlur()
+                    typeof onBlur === "function" && onBlur(e)
                 }}
                 onSubmitEditing={onSubmitEditing}
                 ref={finalInputRef}
@@ -115,7 +117,6 @@ export default function MyTextInput({
                 keyboardType={keyboardType}
                 placeholder="\u200B"
                 placeholderTextColor="transparent"
-                includeFontPadding={false}
                 textAlignVertical="center"
                 multiline={multiline ?? false}
                 numberOfLines={multiline ? undefined : 1}

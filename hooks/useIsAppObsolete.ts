@@ -4,8 +4,11 @@ import * as Application from 'expo-application'
 import request from '@utils/request'
 
 
-const isRunningVersionObsolete = (runningVersion, minimumVersion) => {
+const isRunningVersionObsolete = (runningVersion : string | null, minimumVersion : string) => {
     let obsoleteBuild = false
+
+    if (!!(!runningVersion || !minimumVersion)) return obsoleteBuild
+
     const runningVersionNumbers = runningVersion.split('.').map(e => Number(e))
     const minimumVersionNumbers = minimumVersion.split('.').map(e => Number(e))
 
@@ -31,7 +34,7 @@ export default function useIsAppObsolete() {
     const [appObsolete, setAppObsolete] = useState(false)
 
     const updateAppVersionStatus = async () => {
-        const data = await request({ path: '/users/getAppMinimumVersion' })
+        const data = await request<{ appMinimumVersion : string }>({ path: '/users/getAppMinimumVersion' })
         if (data?.result) {
             const appRunningVersion = Application.nativeApplicationVersion
             

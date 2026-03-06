@@ -15,8 +15,7 @@ const STORE_CONFIG = {
 };
 
 export const redirectToStores = async () => {
-    const platformConfig =
-        STORE_CONFIG[Platform.OS] || STORE_CONFIG.android;
+    const platformConfig = Platform.OS === "ios" ? STORE_CONFIG.ios : STORE_CONFIG.android
     const { deepLink, fallback } = platformConfig;
 
     try {

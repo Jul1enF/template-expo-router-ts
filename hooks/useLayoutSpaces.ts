@@ -3,7 +3,9 @@ import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-cont
 import Constants from 'expo-constants';
 import { appStyle } from "@styles/appStyle"
 
-export default function useLayoutSpaces(props) {
+export default function useLayoutSpaces(props : {
+    tabBar? : boolean, secondHeader? : boolean, header? : boolean
+}) {
     const { tabBar = true, secondHeader = false, header = true } = props ?? {}
 
     const { height: screenHeight, width: screenWidth } = useSafeAreaFrame()

@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
+import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { useSegments } from "expo-router";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,8 +16,9 @@ import { RPH, RPW, phoneDevice } from "@utils/dimensions"
 import { appStyle } from "@styles/appStyle";
 
 
+type HeaderProps = NativeStackHeaderProps & { appObsolete : boolean}
 
-export default function Header({ appObsolete }) {
+export default function Header({ appObsolete, ...props } : HeaderProps) {
 
     const [menuVisible, setMenuVisible] = useState(false)
 
@@ -36,7 +38,7 @@ export default function Header({ appObsolete }) {
 
     return (
         <View>
-            <StatusBar translucent={true} backgroundColor="transparent" barStyle="light" />
+            <StatusBar translucent={true} backgroundColor="transparent" barStyle="light-content" />
             <LinearGradient style={[styles.header, { height: fullHeaderHeight, paddingTop: statusBarOffset }]}
                 colors={[appStyle.strongRed, appStyle.strongBlack]}
                 locations={[0, 0.75]}

@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import { Platform } from "react-native"
+import { ComponentProps } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { RPH, RPW, phoneDevice } from "@utils/dimensions"
@@ -24,7 +25,7 @@ export default function TabsLayout() {
         tabBarAllowFontScaling : false,
 
         tabBarIcon: ({ focused }) => {
-          let iconName = '';
+          let iconName : ComponentProps<typeof MaterialCommunityIcons>["name"] = "square-outline";
           let color = ""
           color = focused ? appStyle.darkWhite : appStyle.lightGrey
 

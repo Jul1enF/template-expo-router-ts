@@ -8,6 +8,7 @@ export default function RootLayout() {
         }}>
             <Stack.Screen name="index" options={{
                 title : "Tab 2",
+                animationTypeForReplace : 'pop',
             }} />
         </Stack>
     )

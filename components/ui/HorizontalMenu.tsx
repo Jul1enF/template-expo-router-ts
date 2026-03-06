@@ -1,0 +1,154 @@
+import { Text, TouchableOpacity, FlatList, View, StyleSheet } from "react-native";
+import { useMemo, useRef, useEffect, Dispatch, SetStateAction } from "react";
+import { RPH, RPW, phoneDevice } from "@utils/dimensions"
+import { appStyle } from "@styles/appStyle"
+import { useRouter } from "expo-router";
+
+// TYPES
+type HorizontalMenuDataElem = 
+{ title?: string, link?: string, func?: () => void, [key: string]: unknown } | string
+
+export type HorizontalMenuData = HorizontalMenuDataElem[] | { [category: string]: HorizontalMenuDataElem }
+
+type HorizontalMenuProps = { data: HorizontalMenuData; menuBelow?: boolean, menuFunction?: () => void, titleToSelectKey?: string, chosenItem: string, setChosenItem: Dispatch<SetStateAction<string>>, sectionToSelectKey?: string, countProp?: string, sortByLength?: boolean }
+
+
+// COMPONENT 
+
+export function HorizontalMenu({ data, menuBelow = false, menuFunction, titleToSelectKey, chosenItem, setChosenItem, sectionToSelectKey, countProp, sortByLength }: HorizontalMenuProps) {
+
+    const router = useRouter()
+
+    const dataArray = useMemo(() => {
+        if (Array.isArray(data)) return data
+        return Object.values(data).sort((a, b) => {
+            if (countProp && typeof a !== "string" && typeof b !== "string") {
+                const valA = a[countProp]
+                const valB = b[countProp]
+
+                if (sortByLength && (Array.isArray(valA) || typeof valA === "string") && (Array.isArray(valB) || typeof valB === "string")) {
+                    return valB.length - valA.length
+                }
+                else if (typeof valA === "number" && typeof valB === "number") return valB - valA
+                else return 0
+            }
+            else return 0
+        })
+    }, [data, countProp, sortByLength])
+
+
+
+
+    const flatlistRef = useRef<FlatList<HorizontalMenuDataElem>>(null)
+
+    // Function to know if an item is selected
+    const isItemSelected = (item: HorizontalMenuDataElem): boolean => {
+        if (typeof item === "string") return item === chosenItem
+        else if (sectionToSelectKey && typeof item[sectionToSelectKey] === "string") 
+            return item[sectionToSelectKey] === chosenItem
+        else return false
+    }
+
+    // Scroll to index function for the flatlist
+    const scrollToIndex = (delay: number, selectedIndex = dataArray.findIndex(item => isItemSelected(item))) => {
+        if (selectedIndex >= 0 && flatlistRef.current)
+            // Delay to ensure flatlist is ready
+            setTimeout(() => {
+                flatlistRef.current && flatlistRef.current.scrollToIndex({
+                    index: selectedIndex,
+                    animated: true,
+                    viewPosition: 0.5,
+                })
+            }, delay)
+    }
+
+    // useEffect to scroll to the selected element when chosen item changes
+    useEffect(() => {
+        scrollToIndex(10)
+    }, [chosenItem, dataArray])
+
+
+    // FLATLIST ITEM
+    const Item = ({ item }: { item: HorizontalMenuDataElem }) => {
+        const itemIsString = typeof item === "string"
+
+        const getStringProp = (key : string | undefined) : string | null => {
+            if (itemIsString) return item
+            if (!!key && typeof item[key] === "string") return item[key]
+            return null
+        }
+
+        const itemSelected = isItemSelected(item)
+
+        const elemToSelect = getStringProp(sectionToSelectKey) ?? ""
+
+        const itemPress = () => {
+            setChosenItem(elemToSelect)
+            menuFunction?.()
+            if (!itemIsString) {
+                item.func?.()
+                item?.link && router.navigate(item.link)
+            }
+        }
+
+        const title = getStringProp(titleToSelectKey) ?? getStringProp("title") ?? ""
+
+        return (
+            <TouchableOpacity style={[styles.itemBtn, itemSelected ? styles.selectedItemBtn : styles.unselectedItemBtn]} onPress={itemPress}>
+                <Text style={[styles.itemText, itemSelected ? styles.selectedItemText : styles.unselectedItemText]} allowFontScaling={false}>
+                    {title}
+                </Text>
+            </TouchableOpacity>
+        )
+    }
+
+    return (
+        <FlatList
+            data={dataArray}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: 'center', paddingRight: phoneDevice ? RPW(3.5) : 34 }}
+            style={[styles.flatlist, !menuBelow && styles.flatlistBorderBottom]}
+            renderItem={({ item }) => {
+                return <Item item={item} />
+            }}
+            ref={flatlistRef}
+            onScrollToIndexFailed={(info) => scrollToIndex(100, info.index)}
+        />
+    )
+}
+
+const styles = StyleSheet.create({
+    flatlist: {
+        minHeight: appStyle.secondHeaderHeight,
+        maxHeight: appStyle.secondHeaderHeight,
+        width: "100%",
+        minWidth: RPW(100),
+        backgroundColor: appStyle.pageBody.backgroundColor
+    },
+    flatlistBorderBottom: {
+        ...appStyle.secondHeaderBorderBottom,
+    },
+    itemBtn: {
+        marginLeft: appStyle.headerHorizPadd,
+        minHeight: "100%",
+        justifyContent: "center",
+    },
+    unselectedItemBtn: {
+
+    },
+    selectedItemBtn: {
+        borderBottomColor: appStyle.strongBlack,
+        borderBottomWidth: phoneDevice ? 5 : 7,
+        paddingTop: phoneDevice ? 5 : 7,
+    },
+    itemText: {
+        ...appStyle.secondHeaderText,
+    },
+    unselectedItemText: {
+        fontWeight: "400",
+    },
+    selectedItemText: {
+        fontWeight: "600",
+    }
+})

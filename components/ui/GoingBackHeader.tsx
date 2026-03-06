@@ -2,16 +2,20 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
-import { RPH, RPW, phoneDevice } from '@utils/dimensions.js'
-import { appStyle } from '@styles/appStyle.ts';
+import { RPH, RPW, phoneDevice } from '@utils/dimensions'
+import { appStyle } from '@styles/appStyle';
 
-export default function GoingBackHeader({back, previousPage, previousPageName, leftFunction }) {
+type GoingBackHeaderProps = {back? : boolean; previousPage? : string ; previousPageName? : string; leftFunction? : ()=> void}
+
+export default function GoingBackHeader({back, previousPage, previousPageName, leftFunction } : GoingBackHeaderProps) {
 const router = useRouter()
 
 const leftBtnPress = ()=>{
     typeof leftFunction === "function" && leftFunction()
     back && router.back()
-    previousPage && router.back(previousPage)
+
+    // TO COMBINE WITH animationTypeForReplace: 'pop' IN THE SCREEN OPTIONS OF THE SCREEN USING GOINGBACKHEADER
+    previousPage && router.replace(previousPage)
 }
 
     return (

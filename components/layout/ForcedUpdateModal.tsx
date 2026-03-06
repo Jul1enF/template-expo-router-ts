@@ -4,8 +4,11 @@ import { RPH, RPW, phoneDevice } from "@utils/dimensions"
 import { appStyle } from "@styles/appStyle"
 import { redirectToStores } from "@utils/redirectToStores"
 
+type ForcedUpdateModalProps = {
+    appObsolete: boolean, screenWidth : number, screenHeight : number, freeHeight : number, modalOffsetTop : number
+}
 
-export default function ForcedUpdateModal({ appObsolete, screenWidth, screenHeight, freeHeight, modalOffsetTop }) {
+export default function ForcedUpdateModal({ appObsolete, screenWidth, screenHeight, freeHeight, modalOffsetTop }: ForcedUpdateModalProps) {
 
     return (
         <Modal
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: appStyle.darkWhite,
         paddingTop: appStyle.largeMarginTop,
-        paddingHorizontal : 15,
+        paddingHorizontal: 15,
     },
     obsoleteText: {
         ...appStyle.regularText,

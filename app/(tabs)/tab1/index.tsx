@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Button from '@components/ui/Button';
 import ConfirmationModal from '@components/ui/ConfirmationModal';
-import HorizontalMenu from '@components/ui/HorizontalMenu';
+import { HorizontalMenu } from '@components/ui/HorizontalMenu';
 import { useState } from 'react';
 
 import { RPH, RPW, phoneDevice } from '@utils/dimensions'
@@ -23,7 +23,7 @@ export default function Tab1Page() {
 
   return (
     <>
-      <HorizontalMenu data={sectionsArray} name={"sectionName"} chosenItem={selectedSection} setChosenItem={setSelectedSection} categoryType="sectionName" />
+      <HorizontalMenu data={sectionsArray} titleToSelectKey={"sectionName"} chosenItem={selectedSection} setChosenItem={setSelectedSection} sectionToSelectKey="sectionName" />
       <View style={styles.body}>
         <Text style={styles.pageTitle}>Tab 1 !</Text>
 

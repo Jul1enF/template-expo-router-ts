@@ -1,27 +1,36 @@
-// Function to count the number of docs (arrays or objects) owned by stored data
+import { Dispatch, SetStateAction, RefObject } from "react"
+
+// FUNCTION TO COUNT THE NUMBER OF DOCS (ARRAYS OR OBJECTS) REGISTERED IN STORED DATA
+
 // Same way of counting than in sendIfUpdated middleware in the back end
-const getDocsCount = (storedData) => {
+const getDocsCount = (storedData: unknown) => {
 
     // Deserialize data if they have been serialized (by redux)
     const deserializedData = JSON.parse(JSON.stringify(storedData))
 
     let docsCount = 0
-    const visitedDocs = new WeakSet()
+    const visitedDocs = new WeakSet<object>()
 
-    const extractDocsCount = (doc) => {
+    const hasId = (value: unknown): value is { _id: unknown } => {
+        return (typeof value === "object" && value !== null && "_id" in value)
+    }
+
+    const extractDocsCount = (doc: unknown) => {
         if (!doc || typeof doc !== "object" || visitedDocs.has(doc)) return
         visitedDocs.add(doc)
 
         // Add a doc to the count
-        if (doc._id) docsCount += 1
+        if (hasId(doc)) docsCount += 1
 
         if (Array.isArray(doc)) {
             doc.forEach(e => extractDocsCount(e))
         }
         else {
             // Searching inside an object for other docs
-            for (const key in doc) {
-                const val = doc[key];
+            const recordDoc = doc as Record<string, unknown>
+
+            for (const key in recordDoc) {
+                const val = recordDoc[key];
 
                 // If it is an array
                 if (Array.isArray(val) && val.length) {
@@ -41,22 +50,44 @@ const getDocsCount = (storedData) => {
 }
 
 
+// TYPES
+
+type RequestProps = { path: string, method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH", body?: object, params?: string | object, jwtToken?: string, setSessionExpired?: Dispatch<SetStateAction<boolean>>, functionRef?: RefObject<boolean>, setWarning?: Dispatch<SetStateAction<{ text?: string, success?: boolean }>>, setModalVisible?: Dispatch<SetStateAction<boolean>>, setUploading?: Dispatch<SetStateAction<boolean>>, clearEtag?: boolean, storedData?: unknown }
+
+type CustomHeaders = Partial<Record<"Authorization" | "If-None-Match" | "X-Docs-Count" | "Content-Type",
+    string
+>>
+
+type ApiBaseResponse = {
+    result: boolean
+    errorText?: string
+    successText?: string
+    sessionExpired?: boolean
+    notModified?: boolean
+    delay?: number
+}
+
+type ApiResponse<T = unknown> = ApiBaseResponse & T
 
 
-export default async function request(props) {
+
+// FETCH + ERROR HANDLER
+
+export default async function request<T = unknown>(props: RequestProps) : Promise<ApiResponse<T> | void> 
+{
     const { path, method = "GET", body, params, jwtToken, setSessionExpired, functionRef, setWarning, setModalVisible, setUploading, clearEtag, storedData } = props
 
-    const warning = typeof setWarning === "function"
-    const modal = typeof setModalVisible === "function"
-    const uploading = typeof setUploading === "function"
-    const session = typeof setSessionExpired === "function"
+    const warning = !!setWarning
+    const modal = !!setModalVisible
+    const uploading = !!setUploading
+    const session = !!setSessionExpired
 
-    let warningText
-    let sessionExpired
+    let warningText: string = ""
+    let sessionExpired : undefined | boolean
 
-    const readingTime = (text) => text ? Math.round(text.length * 53) : 0
+    const readingTime = (text: string | undefined) => text ? Math.round(text.length * 53) : 0
 
-    const displayWarning = (message, success) => {
+    const displayWarning = (message?: string, success?: boolean) => {
         if (warning) {
             warningText = message ?? "Erreur : Problème de connexion"
             setWarning({ text: warningText, success: success ?? false })
@@ -73,11 +104,11 @@ export default async function request(props) {
 
         const url = process.env.EXPO_PUBLIC_BACK_ADDRESS;
 
-        const headers = jwtToken ? { Authorization: `Bearer ${jwtToken}` } : {};
-        const options = { method, headers };
+        const headers: CustomHeaders = jwtToken ? { Authorization: `Bearer ${jwtToken}` } : {};
+        const options: RequestInit = { method, headers };
 
         if (clearEtag) headers["If-None-Match"] = ""
-        if ("storedData" in props) headers["X-Docs-Count"] = getDocsCount(storedData).toString()
+        if (storedData !== undefined) headers["X-Docs-Count"] = getDocsCount(storedData).toString()
 
         if (body) {
             if (body instanceof FormData) {
@@ -91,17 +122,17 @@ export default async function request(props) {
         const urlParams = params
             ? "/" + (Array.isArray(params) ? params.join("/") : params)
             : "";
-       
+
         const response = await fetch(`${url}${path}${urlParams}`, options);
-        const data = await response.json()
+        const data = await response.json() as ApiResponse<T>
 
         if (!data.result) {
-            displayWarning(data.errorText ?? null)
+            displayWarning(data.errorText ?? undefined)
             sessionExpired = data.sessionExpired
             // If the session has not expired (wich mean automatic expulsion of the user), we return the delay during wich the error message will be displayed (in case of an action needed after) and the data in case of a check inside if it is needed
-            if (!sessionExpired) return { 
-                delay : readingTime(warningText) + 400,
-                ...(data && data),
+            if (!sessionExpired) return {
+                delay: readingTime(warningText) + 400,
+                ...data,
             }
         }
         else if (data.notModified) {
@@ -123,12 +154,12 @@ export default async function request(props) {
 
         if (modal || warningText) setTimeout(() => {
             modal && setModalVisible(false)
-            warningText && setWarning({})
+            warningText && setWarning?.({})
         }, readingTime(warningText))
 
-        if (session && sessionExpired){
+        if (session && sessionExpired) {
             const delay = readingTime(warningText) + (modal ? 400 : 0)
-            setTimeout(()=> setSessionExpired(true), delay)
+            setTimeout(() => setSessionExpired(true), delay)
         }
     }
 }
