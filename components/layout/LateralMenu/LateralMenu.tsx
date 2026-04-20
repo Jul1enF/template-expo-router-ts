@@ -20,7 +20,7 @@ type LateralMenuProps = {
     freeHeight : number;
 }
 
-export type LateralMenuItem = {
+export type LateralMenuItemBase = {
     sectionName : string;
     link?: string;
     func?: ()=> void;
@@ -35,7 +35,7 @@ export default function LateralMenu({ menuVisible, setMenuVisible, screenHeight,
     const dispatch = useAppDispatch()
     const logoutUser = () => dispatch(logout())
 
-    const sectionsArray : LateralMenuItem[] = [
+    const sectionsArray : LateralMenuItemBase[] = [
         { sectionName: "Accueil", link: "/" },
         { sectionName: jwtToken ? "Se déconnecter" : "Se connecter / S'inscrire", link: jwtToken ? "/" : "/login", func: jwtToken ? logoutUser : undefined },
         { sectionName: "Tab 2", link: "/tab2" },

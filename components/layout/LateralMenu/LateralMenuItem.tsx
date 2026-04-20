@@ -3,9 +3,9 @@ import { Dispatch, SetStateAction } from "react";
 import { RPH, RPW, phoneDevice } from "@utils/dimensions"
 import { appStyle } from "@styles/appStyle"
 import { router } from "expo-router";
-import { LateralMenuItem } from "./LateralMenu";
+import { LateralMenuItemBase } from "./LateralMenu";
 
-type LateralMenuItemProps = LateralMenuItem & {
+type LateralMenuItemProps = LateralMenuItemBase & {
     setMenuVisible: Dispatch<SetStateAction<boolean>>;
 }
 

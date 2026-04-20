@@ -11,6 +11,7 @@
       "@hooks/*": ["hooks/*"],
       "@reducers/*": ["reducers/*"],
       "@store/*" : ["store/*"],
+      "@app-types/*" : ["types/*"],
     }
   },
   "exclude": ["node_modules", "babel.config.js"]
