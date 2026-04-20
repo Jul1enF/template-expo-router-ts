@@ -16,6 +16,7 @@ module.exports = function (api) {
             "@utils" : path.resolve("./utils"),
             "@hooks" : path.resolve("./hooks"),
             "@reducers" : path.resolve("./reducers"),
+            "@store": path.resolve("./store"),
           },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
         },

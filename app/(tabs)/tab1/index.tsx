@@ -20,10 +20,10 @@ export default function Tab1Page() {
   ]
  
   const [selectedSection, setSelectedSection] = useState(sectionsArray[0].sectionName)
-
+  
   return (
     <>
-      <HorizontalMenu data={sectionsArray} titleToSelectKey={"sectionName"} chosenItem={selectedSection} setChosenItem={setSelectedSection} sectionToSelectKey="sectionName" />
+      <HorizontalMenu data={sectionsArray} titleToSelectKey={"sectionName"} chosenItem={selectedSection} setChosenItem={setSelectedSection} />
       <View style={styles.body}>
         <Text style={styles.pageTitle}>Tab 1 !</Text>
 

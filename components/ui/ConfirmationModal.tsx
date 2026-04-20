@@ -4,9 +4,21 @@ import Modal from "react-native-modal"
 import Button from "@components/ui/Button";
 
 import { RPH, RPW, phoneDevice } from '@utils/dimensions'
-import { appStyle } from '@styles/appStyle.ts';
+import { appStyle } from '@styles/appStyle';
 
-export default function ConfirmationModal({ visible, closeModal, confirmationText, confirmationBtnText, confirmationFunc, warning, cancelBtnText }) {
+// TYPES
+
+type ConfirmationModalProps = {
+    visible: boolean;
+    closeModal: () => void;
+    confirmationText: string;
+    confirmationBtnText: string;
+    confirmationFunc: () => void;
+    warning?: { text?: string, success?: boolean },
+    cancelBtnText: string;
+}
+
+export default function ConfirmationModal({ visible, closeModal, confirmationText, confirmationBtnText, confirmationFunc, warning, cancelBtnText }: ConfirmationModalProps) {
 
     const { screenHeight, screenWidth } = useLayoutSpaces()
 
@@ -32,10 +44,10 @@ export default function ConfirmationModal({ visible, closeModal, confirmationTex
                 </Text>
                 <View style={styles.line} />
 
-                <Button func={closeModal} text={cancelBtnText} style={{marginTop : 0}} />
+                <Button func={closeModal} text={cancelBtnText} style={{ marginTop: 0 }} />
                 <Button func={confirmationFunc} text={confirmationBtnText} />
 
-                <Text style={[appStyle.warning, warning?.success && appStyle.success, !warning?.text && { height: 0, marginTop : 0 }]}>
+                <Text style={[appStyle.warning, warning?.success && appStyle.success, !warning?.text && { height: 0, marginTop: 0 }]}>
                     {warning?.text}
                 </Text>
             </View>
@@ -49,7 +61,7 @@ const styles = StyleSheet.create({
     },
     confirmationText: {
         ...appStyle.largeText,
-        textAlign : "center",
+        textAlign: "center",
         color: appStyle.fontColorDarkBg,
         lineHeight: phoneDevice ? RPW(7.3) : 44,
     },

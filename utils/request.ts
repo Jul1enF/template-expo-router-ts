@@ -67,13 +67,13 @@ type ApiBaseResponse = {
     delay?: number
 }
 
-type ApiResponse<T = unknown> = ApiBaseResponse & T
+type ApiResponse<SpecificApiData = unknown> = ApiBaseResponse & SpecificApiData
 
 
 
 // FETCH + ERROR HANDLER
 
-export default async function request<T = unknown>(props: RequestProps) : Promise<ApiResponse<T> | void> 
+export default async function request<SpecificApiData = unknown>(props: RequestProps) : Promise<ApiResponse<SpecificApiData> | void> 
 {
     const { path, method = "GET", body, params, jwtToken, setSessionExpired, functionRef, setWarning, setModalVisible, setUploading, clearEtag, storedData } = props
 
@@ -102,7 +102,7 @@ export default async function request<T = unknown>(props: RequestProps) : Promis
         warning && setWarning({})
         uploading && setUploading(true)
 
-        const url = process.env.EXPO_PUBLIC_BACK_ADDRESS;
+        const url: string = process.env.EXPO_PUBLIC_BACK_ADDRESS;
 
         const headers: CustomHeaders = jwtToken ? { Authorization: `Bearer ${jwtToken}` } : {};
         const options: RequestInit = { method, headers };
@@ -124,12 +124,12 @@ export default async function request<T = unknown>(props: RequestProps) : Promis
             : "";
 
         const response = await fetch(`${url}${path}${urlParams}`, options);
-        const data = await response.json() as ApiResponse<T>
+        const data = await response.json() as ApiResponse<SpecificApiData>
 
         if (!data.result) {
             displayWarning(data.errorText ?? undefined)
             sessionExpired = data.sessionExpired
-            // If the session has not expired (wich mean automatic expulsion of the user), we return the delay during wich the error message will be displayed (in case of an action needed after) and the data in case of a check inside if it is needed
+            // If the session has not expired (wich mean automatic expulsion of the user), we return the delay during wich the error message will be displayed (in case of an action needed after) and the data in case a check inside is needed
             if (!sessionExpired) return {
                 delay: readingTime(warningText) + 400,
                 ...data,

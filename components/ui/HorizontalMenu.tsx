@@ -4,6 +4,9 @@ import { RPH, RPW, phoneDevice } from "@utils/dimensions"
 import { appStyle } from "@styles/appStyle"
 import { useRouter } from "expo-router";
 
+// titleToSelectKey props => if the item is an object without a "title" key, the key with the value of the title to display
+// sectionToSelectKey props => if the item is an object and the title shouldn't be selected with setChosenItem, the key whose value will be chosen
+
 // TYPES
 type HorizontalMenuDataElem = 
 { title?: string, link?: string, func?: () => void, [key: string]: unknown } | string
@@ -44,8 +47,10 @@ export function HorizontalMenu({ data, menuBelow = false, menuFunction, titleToS
     // Function to know if an item is selected
     const isItemSelected = (item: HorizontalMenuDataElem): boolean => {
         if (typeof item === "string") return item === chosenItem
-        else if (sectionToSelectKey && typeof item[sectionToSelectKey] === "string") 
+        else if (sectionToSelectKey && typeof item[sectionToSelectKey] === "string")
             return item[sectionToSelectKey] === chosenItem
+        else if (titleToSelectKey) return item[titleToSelectKey] === chosenItem
+        else if (typeof item.title === "string") return item.title === chosenItem
         else return false
     }
 
@@ -72,7 +77,7 @@ export function HorizontalMenu({ data, menuBelow = false, menuFunction, titleToS
     const Item = ({ item }: { item: HorizontalMenuDataElem }) => {
         const itemIsString = typeof item === "string"
 
-        const getStringProp = (key : string | undefined) : string | null => {
+        const extractRelevantString = (key : string) : string | null => {
             if (itemIsString) return item
             if (!!key && typeof item[key] === "string") return item[key]
             return null
@@ -80,7 +85,7 @@ export function HorizontalMenu({ data, menuBelow = false, menuFunction, titleToS
 
         const itemSelected = isItemSelected(item)
 
-        const elemToSelect = getStringProp(sectionToSelectKey) ?? ""
+        const elemToSelect = extractRelevantString(sectionToSelectKey ?? titleToSelectKey ?? "title") ?? ""
 
         const itemPress = () => {
             setChosenItem(elemToSelect)
@@ -91,7 +96,7 @@ export function HorizontalMenu({ data, menuBelow = false, menuFunction, titleToS
             }
         }
 
-        const title = getStringProp(titleToSelectKey) ?? getStringProp("title") ?? ""
+        const title = extractRelevantString(titleToSelectKey ?? "title") ?? ""
 
         return (
             <TouchableOpacity style={[styles.itemBtn, itemSelected ? styles.selectedItemBtn : styles.unselectedItemBtn]} onPress={itemPress}>

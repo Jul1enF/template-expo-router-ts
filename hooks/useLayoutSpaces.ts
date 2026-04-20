@@ -3,10 +3,13 @@ import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-cont
 import Constants from 'expo-constants';
 import { appStyle } from "@styles/appStyle"
 
-export default function useLayoutSpaces(props : {
-    tabBar? : boolean, secondHeader? : boolean, header? : boolean
-}) {
-    const { tabBar = true, secondHeader = false, header = true } = props ?? {}
+type UseLayoutSpacesOptions = {
+    tabBar?: boolean;
+    secondHeader?: boolean;
+    header?: boolean;
+}
+
+export default function useLayoutSpaces({ tabBar = true, secondHeader = false, header = true }: UseLayoutSpacesOptions = {}) {
 
     const { height: screenHeight, width: screenWidth } = useSafeAreaFrame()
 
@@ -21,7 +24,7 @@ export default function useLayoutSpaces(props : {
     const topBlockedHeight = fullHeaderHeight + (secondHeader ? appStyle.secondHeaderHeight : 0)
 
     const env = Constants.executionEnvironment
-    const isBuild = env === "bare" || env === "standalone" ? true  : false
+    const isBuild = env === "bare" || env === "standalone" ? true : false
 
     // On expo go Android, for modals (react-native-modal), top : 0 already include the statusBarOffset
     const modalOffsetTop = Platform.OS === "ios" || isBuild ? topBlockedHeight : topBlockedHeight - statusBarOffset

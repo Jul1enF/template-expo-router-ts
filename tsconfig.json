@@ -3,12 +3,14 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@styles/*": ["styles/*"],
       "@components/*": ["components/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
-      "@reducers/*": ["reducers/*"]
+      "@reducers/*": ["reducers/*"],
+      "@store/*" : ["store/*"],
     }
   },
   "exclude": ["node_modules", "babel.config.js"]

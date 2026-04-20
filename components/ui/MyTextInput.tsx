@@ -1,10 +1,10 @@
-import { TextInput, View, StyleSheet, Text, Platform, ViewStyle, TextStyle, TextInputProps } from "react-native";
+import { TextInput, View, StyleSheet, Text, Platform, StyleProp, ViewStyle, TextStyle, TextInputProps } from "react-native";
 import { RefObject, useRef, useState, ReactNode } from "react";
 import { appStyle } from "@styles/appStyle";
 
 
 type MyTextInputProps = TextInputProps & {
-    style? : ViewStyle & TextStyle, inputRef? : RefObject<TextInput> | null, children : ReactNode
+    style? : StyleProp<ViewStyle & TextStyle>, inputRef? : RefObject<TextInput> | null, children : ReactNode
 }
 
 export default function MyTextInput({
@@ -26,7 +26,7 @@ export default function MyTextInput({
     children,
 } : MyTextInputProps) {
 
-    const styleObject : ViewStyle & TextStyle = StyleSheet.flatten(style) ?? {}
+    const styleObject = (StyleSheet.flatten(style) ?? {}) as ViewStyle & TextStyle
 
     const { minHeight, paddingTop, paddingBottom, width, height, maxHeight, maxWidth, borderRadius, marginTop, paddingHorizontal, borderColor, borderWidth, borderBottomWidth, borderBottomColor, backgroundColor, paddingLeft, paddingRight, ...fontStyle } = styleObject
 
@@ -46,7 +46,6 @@ export default function MyTextInput({
 
     // On android we display a text overlay so when the input is not focused, the text start from the left
     const android = Platform.OS === "android"
-    // const showTextOverlay : boolean = android && !isFocus && value.length !== 0
     const showTextOverlay = !!(android && !isFocus && value)
     // There is an automatic text input padding (in addition to the one in style) on android
     const textInputInset = android ? 1.5 : 0
@@ -56,7 +55,7 @@ export default function MyTextInput({
         <View style={[styles.mainContainer, styleObject?.marginTop !== undefined && { marginTop: styleObject?.marginTop }]}
         >
 
-            {/* Display of a custom place holder or a text with the input value (so it starts from left on android) if the input is not focused */}
+            {/* Display of a custom place holder (layout and breaking words problems with the native one) or a text with the input value (so it starts from left on android) if the input is not focused */}
             <View style={[{
                 height: "100%",
                 position: "absolute",
