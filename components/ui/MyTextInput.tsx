@@ -3,8 +3,11 @@ import { RefObject, useRef, useState, ReactNode } from "react";
 import { appStyle } from "@styles/appStyle";
 
 
+// IF USED WITH ICONS AS CHILDREN, THE PARENT MUST NOT HAVE alignItems : "strech"
+
+
 type MyTextInputProps = TextInputProps & {
-    style? : StyleProp<ViewStyle & TextStyle>, inputRef? : RefObject<TextInput> | null, children : ReactNode
+    style? : StyleProp<ViewStyle & TextStyle>, inputRef? : RefObject<TextInput | null>, children : ReactNode
 }
 
 export default function MyTextInput({
@@ -22,7 +25,7 @@ export default function MyTextInput({
     keyboardType,
     multiline,
     editable = true,
-    inputRef = null,
+    inputRef,
     children,
 } : MyTextInputProps) {
 

@@ -1,25 +1,15 @@
-import { ColorValue, ViewStyle, TextStyle, TextInput } from "react-native";
+import { ColorValue, ViewStyle, TextStyle, TextInput, TextInputProps, StyleProp } from "react-native";
 import { Dispatch, ReactNode, SetStateAction, RefObject } from "react";
 
 // ITEM TYPES
 
-export type EmployeeItemType = {
-    employee: EmployeeType;
-    title: string;
+export type AutocompleteItem = string | {
+    title?: string;
+    boldTitle?: string;
+    lightTitle?: string;
+    [key: string]: unknown;
 }
 
-export type EmployeeType = {
-    __v: number;
-    _id: string;
-    contract_end: null | string;
-    createdAt: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    role: string;
-    schedule: {};
-    updatedAt: string;
-}
 
 
 // COMPONENTS PROPS
@@ -34,26 +24,26 @@ type ComponentsSharedProps = {
     dropdownItemStyle?: ViewStyle;
     dropdownTextStyle?: TextStyle;
     dropdownLineColor?: ColorValue;
-    boldTitleWeight?: string;
+    boldTitleWeight?: TextStyle["fontWeight"];
     tabBar?: boolean;
     header?: boolean;
 }
 
 
 // AUTOCOMPLETE
-export type AutocompleteProps<AutocompleteItem, SelectedItem> = ComponentsSharedProps & {
+export type AutocompleteProps = ComponentsSharedProps & {
     data?: AutocompleteItem[];
-    setSelectedItem: Dispatch<SetStateAction<null | SelectedItem>>;
-    selectedItem: null | SelectedItem;
+    setSelectedItem: Dispatch<SetStateAction<unknown>>;
+    selectedItem: unknown;
     placeholderText?: string;
     placeholderColor?: ColorValue;
-    inputStyle?: TextStyle & ViewStyle;
+    inputStyle?: StyleProp<TextStyle & ViewStyle>;
     iconColor?: ColorValue;
     canCreate?: true | "string";
     editable?: boolean;
     showClear?: boolean;
     multiline?: boolean;
-    autoCapitalize?: boolean;
+    autoCapitalize?: TextInputProps["autoCapitalize"];
 }
 
 
@@ -63,15 +53,13 @@ export type AutocompleteProviderProps = {
     children: ReactNode;
 }
 
-export type DropdownItem = EmployeeItemType | string // & Other types of item used in the app
-export type DropdownSelectedItem = EmployeeType | string
 
 export type DropDownProps = ComponentsSharedProps & {
-    flatlistData?: DropdownItem[];
-    setSelectedItem: Dispatch<SetStateAction<null | DropdownSelectedItem>>;
+    flatlistData?: AutocompleteItem[];
+    setSelectedItem: Dispatch<SetStateAction<unknown>>;
     closeDropdown: () => void;
     layoutStyle: ViewStyle;
-    autocompleteInputRef: RefObject<TextInput>;
+    autocompleteInputRef: RefObject<TextInput | null>;
     dropdownId: string;
 }
 
@@ -87,10 +75,10 @@ export type AutocompleteContextType = {
 };
 
 
-// HOOK
+// HOOK / UTILS
 export type UseDropdownPositionOptions = {
     dropdownHeight: null | number;
-    autocompleteInputRef: RefObject<TextInput>; 
+    autocompleteInputRef: RefObject<TextInput | null>; 
     tabBar?: boolean;
     header?: boolean;
     dropdownId: string;
@@ -101,4 +89,11 @@ export type UseDropdownPositionOptions = {
 export type InputMeasureType = ScreenLocationType & {
     width: number;
     height: number;
+}
+
+export type FindSelectItemTitleOptions = {
+    data: AutocompleteItem[];
+    sectionToSelectKey?: string;
+    titleToSelectKey?: string;
+    selectedItem: unknown;
 }

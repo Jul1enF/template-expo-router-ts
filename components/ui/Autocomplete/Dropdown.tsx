@@ -4,22 +4,23 @@ import useDropdownPosition from "./useDropdownPosition";
 
 import { RPH, RPW, phoneDevice } from '@utils/dimensions'
 import { appStyle } from '@styles/appStyle';
-import { DropDownProps, ScreenLocationType } from "./Autocomplete.types";
+import { DropDownProps, AutocompleteItem, ScreenLocationType } from "./Autocomplete.types";
+import { itemHasKey, itemHasStringValue } from "@utils/typeGuards";
 
 type PressTypes = {
     pressLocation: null | ScreenLocationType;
     setPressLocation: Dispatch<SetStateAction<ScreenLocationType | null>>
 }
 
-export default function Dropdown({ flatlistData, setSelectedItem, sectionToSelectKey, titleToSelectKey, closeDropdown, emptyResultText, layoutStyle = {}, dropdownMaxHeight, dropdownContainerStyle = {}, dropdownItemStyle = {}, dropdownTextStyle = {}, boldTitleWeight = "700", dropdownLineColor, autocompleteInputRef, tabBar, header, dropdownId, pressLocation, setPressLocation } : DropDownProps & PressTypes) {
+export default function Dropdown({ flatlistData, setSelectedItem, sectionToSelectKey, titleToSelectKey, closeDropdown, emptyResultText, layoutStyle = {}, dropdownMaxHeight, dropdownContainerStyle = {}, dropdownItemStyle = {}, dropdownTextStyle = {}, boldTitleWeight = "700", dropdownLineColor, autocompleteInputRef, tabBar, header, dropdownId, pressLocation, setPressLocation }: DropDownProps & PressTypes) {
 
     // useEffect to reset a potential register value of the location of a tap
-    useEffect(()=>{
+    useEffect(() => {
         setPressLocation(null)
         return () => {
             setPressLocation(null)
         }
-    },[])
+    }, [])
 
     // State to register the height of the dropdown
     const [dropdownHeight, setDropdownHeight] = useState<null | number>(null)
@@ -30,28 +31,26 @@ export default function Dropdown({ flatlistData, setSelectedItem, sectionToSelec
     // Item component for the suggestion list
     const textStyle = [styles.dropdownItemText, dropdownTextStyle]
 
-    const DropdownItem = ({ item }) => {
-        let title
 
-        if (item) {
-            title = titleToSelectKey ? item[titleToSelectKey] :
-                typeof item === "string" ? item :
-                    item.title
-        }
+    // Dropdown item component for the flatlist
+    const DropdownItem = ({ item }: { item: AutocompleteItem | null}) => {
 
+        const title = (titleToSelectKey && itemHasStringValue(item, titleToSelectKey)) ? item[titleToSelectKey] : itemHasStringValue(item, "title") ? item.title :
+            typeof item === "string" ? item : null
+            
         return (
             <View style={[appStyle.regularItem, { ...layoutStyle }, { ...dropdownItemStyle }, { marginTop: 0 }]} >
 
                 {item &&
                     <Text style={textStyle}>
 
-                        {item.boldTitle &&
+                        {itemHasStringValue(item, "boldTitle") &&
                             <Text style={[...textStyle, { fontWeight: boldTitleWeight }]} >
                                 {item.boldTitle}
                             </Text>
                         }
 
-                        {item.lightTitle ?? title ?? null}
+                        {itemHasStringValue(item, "lightTitle") ? item.lightTitle : title}
 
                     </Text>
                 }
@@ -76,9 +75,9 @@ export default function Dropdown({ flatlistData, setSelectedItem, sectionToSelec
             <FlatList
                 data={flatlistData}
                 keyExtractor={(item, index) => {
-                    if (sectionToSelectKey && item[sectionToSelectKey]._id) return item[sectionToSelectKey]._id
-                    else if (item._id) return item._id
-                    else return index
+                    if (sectionToSelectKey && itemHasKey(item, sectionToSelectKey) && itemHasStringValue(item[sectionToSelectKey], "_id")) return item[sectionToSelectKey]._id
+                    else if (itemHasStringValue(item, "_id")) return item._id
+                    else return index.toString()
                 }}
                 keyboardShouldPersistTaps="handled"
                 nestedScrollEnabled
@@ -90,7 +89,7 @@ export default function Dropdown({ flatlistData, setSelectedItem, sectionToSelec
                 }}
                 renderItem={({ item, index }) =>
                     <TouchableOpacity onPress={() => {
-                        setSelectedItem(sectionToSelectKey ? item[sectionToSelectKey] : item )
+                        setSelectedItem((sectionToSelectKey && itemHasKey(item, sectionToSelectKey)) ? item[sectionToSelectKey] : item)
                         closeDropdown()
                     }} >
                         <DropdownItem item={item} />
@@ -98,7 +97,7 @@ export default function Dropdown({ flatlistData, setSelectedItem, sectionToSelec
                 }
                 ListEmptyComponent={<DropdownItem item={null} />}
                 ItemSeparatorComponent={
-                    <View style={{ height: 1, backgroundColor: dropdownLineColor }} />
+                    ()=> <View style={{ height: 1, backgroundColor: dropdownLineColor }} />
                 }
             />
         </View>

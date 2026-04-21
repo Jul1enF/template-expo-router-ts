@@ -2,7 +2,7 @@ import { View, StyleSheet, Platform, GestureResponderEvent } from "react-native"
 import { useState, createContext, useContext, useRef } from "react";
 import Dropdown from "./Dropdown";
 import useLayoutSpaces from "@hooks/useLayoutSpaces";
-import { AutocompleteProviderProps, DropDownProps, AutocompleteContextType, PressLocationType } from "./Autocomplete.types";
+import { AutocompleteProviderProps, DropDownProps, AutocompleteContextType, ScreenLocationType } from "./Autocomplete.types";
 
 
 const AutocompleteContext = createContext<undefined | AutocompleteContextType>(undefined)
@@ -15,8 +15,8 @@ export function AutocompleteProvider({ modalPageWrapper = false, children }: Aut
     const { freeHeight, fullHeaderHeight } = useLayoutSpaces({ tabBar, header })
 
     // Registration of a potential press outside the autocomplete
-    const touchStartRef = useRef<null | PressLocationType>(null)
-    const [pressLocation, setPressLocation] = useState<null | PressLocationType>(null)
+    const touchStartRef = useRef<null | ScreenLocationType>(null)
+    const [pressLocation, setPressLocation] = useState<null | ScreenLocationType>(null)
     const pressThreslhold = Platform.OS === "android" ? 14 : 10
 
     // Registration of the current dropdown id to share it with context to all the autocomplete

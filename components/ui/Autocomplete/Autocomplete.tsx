@@ -1,8 +1,9 @@
-import { View, TouchableOpacity, StyleSheet, Pressable, Animated, Easing } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Pressable, Animated, Easing, TextInput } from "react-native";
 import { useState, useEffect, useRef, useMemo } from "react";
 import MyTextInput from "../MyTextInput";
 import { useDropdownProps } from "./AutocompleteProvider";
 import { AutocompleteProps } from "@components/ui/Autocomplete/Autocomplete.types";
+import { itemHasKey, itemHasStringValue } from "@utils/typeGuards";
 
 import { findSelectedItemTitle, createId } from "./AutocompleteUtils";
 
@@ -17,11 +18,13 @@ import Feather from '@expo/vector-icons/Feather';
 // - THE AUTCOMPLETE HAVE THE PROPS TITLETOSELECTKEY
 // - THE ITEMS ARE DIRECTLY A STRING
 
-// BETTER TO USE IN A SCROLLVIEW WITH : keyboardShouldPersistTaps="handled" TO HAVE ICONS ALWAYS PRESSABLE
+// BETTER TO USE IN A SCROLLVIEW WITH : keyboardShouldPersistTaps="handled" TO HAVE ICONS PRESSABLE EVEN WHEN ANOTHER INPUT IS FOCUSED
 
 // SELECTEDITEM IS MANDATORY
 
-export default function Autocomplete<AutocompleteItem, SelectedItem>({
+// THE PARENT MUST NOT HAVE alignItems : "strech"
+
+export default function Autocomplete({
     data = [],
     setSelectedItem,
     selectedItem,
@@ -45,7 +48,7 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
     autoCapitalize,
     tabBar = true,
     header = true,
-} : AutocompleteProps<AutocompleteItem, SelectedItem>) {
+} : AutocompleteProps) {
 
 
     // VAR, STATES AND HOOKS
@@ -53,15 +56,16 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
     // States and ref for the autocomplete and the dropdown
     const [inputValue, setInputValue] = useState("")
     const [dropdownVisible, setDropdownVisible] = useState(false)
-    const autocompleteInputRef = useRef(null)
+    const autocompleteInputRef = useRef<TextInput>(null)
 
     // Icon container width depending on the display of the clear icon
     const iconsContainerWidth = appStyle.regularHorizontalPadding + (showClear ? appStyle.inputIconSize * 3.6 : appStyle.inputIconSize * 1.8)
 
     // current dropdown props and id shared through context
-    const { setDropdownProps, currentDropdownId, setCurrentDropdownId } = useDropdownProps()
+    const { setDropdownProps, currentDropdownId, setCurrentDropdownId } = useDropdownProps() ?? {}
 
     // Var to help set selectedItem
+    const itemsAreStrings = data.length > 0 && typeof data[0] === "string"
     const registerAString = itemsAreStrings || canCreate === "string"
     const titleKey = titleToSelectKey ?? "title"
 
@@ -83,7 +87,6 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
 
     // USEEFFECT TO CHANGE THE INPUTVALUE IF SELECTEDITEM HAS BEEN CHANGE ELSWHERE
 
-    const itemsAreStrings = data.length > 0 && typeof data[0] === "string"
     useEffect(() => {
         if (!selectedItem && inputValue) {
             setInputValue("")
@@ -91,7 +94,7 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
         }
         else if (selectedItem && selectedItem !== inputValue) {
 
-            if (itemsAreStrings) {
+            if (typeof selectedItem === "string") {
                 setInputValue(selectedItem)
                 return
             }
@@ -113,8 +116,9 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
             const inputTxtLC = inputValue.toLowerCase()
             const titleKey = titleToSelectKey ?? "title"
 
-            return data.filter(e => itemsAreStrings ? e.toLowerCase().includes(inputTxtLC) :
-                e[titleKey].toLowerCase().includes(inputTxtLC)
+            return data.filter(e => typeof e === "string" ? e.toLowerCase().includes(inputTxtLC) :
+                itemHasStringValue(e, titleKey) ? e[titleKey].toLowerCase().includes(inputTxtLC) :
+                false
             )
         }
     }, [data, inputValue])
@@ -122,7 +126,7 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
     // useEffect to change the flatlistData in the provider
     useEffect(() => {
         if (dropdownVisible) {
-            setDropdownProps(prev => ({
+            setDropdownProps && setDropdownProps(prev => prev && ({
                 ...prev,
                 flatlistData,
             }))
@@ -140,15 +144,15 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
     const closeDropdown = () => {
         if (inputFocusRef.current) autocompleteInputRef.current?.blur()
         setDropdownVisible(false)
-        setDropdownProps(null)
-        setCurrentDropdownId(null)
+        setDropdownProps && setDropdownProps(null)
+        setCurrentDropdownId && setCurrentDropdownId(null)
     }
 
     const openDropdown = () => {
         if (!inputFocusRef.current) autocompleteInputRef.current?.focus()
         setDropdownVisible(true)
-        setCurrentDropdownId(dropdownIdRef.current)
-        setDropdownProps({
+        setCurrentDropdownId && setCurrentDropdownId(dropdownIdRef.current)
+        setDropdownProps && setDropdownProps({
             flatlistData,
             setSelectedItem,
             sectionToSelectKey,
@@ -197,8 +201,7 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
         }
     },[currentDropdownId])
 
-
-
+    
 
 
     return (
@@ -214,11 +217,11 @@ export default function Autocomplete<AutocompleteItem, SelectedItem>({
             }}
             onSubmitEditing={(e) => {
                 const text = e.nativeEvent.text.toLowerCase()
-                const foundItem = data.find(elem => itemsAreStrings ? elem.toLowerCase() === text :
-                    elem[titleKey].toLowerCase() === text)
+                const foundItem = data.find(elem => typeof elem === "string" ? elem.toLowerCase() === text :
+                    itemHasStringValue(elem, titleKey) ? elem[titleKey].toLowerCase() === text : false)
 
                 if (foundItem) {
-                    setSelectedItem(!sectionToSelectKey ? foundItem : foundItem[sectionToSelectKey])
+                    setSelectedItem(sectionToSelectKey && itemHasKey(foundItem, sectionToSelectKey) ? foundItem[sectionToSelectKey] : foundItem)
                 } else if (canCreate) {
                     registerAString ? setSelectedItem(e.nativeEvent.text) :
                         setSelectedItem({ [titleKey]: e.nativeEvent.text, ...(sectionToSelectKey && { [sectionToSelectKey]: e.nativeEvent.text }) })
