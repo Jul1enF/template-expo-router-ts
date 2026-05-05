@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity, FlatList, View, StyleSheet } from "react-native";
 import { useMemo, useRef, useEffect, Dispatch, SetStateAction } from "react";
-import { RPH, RPW, phoneDevice } from "@utils/dimensions"
-import { appStyle } from "@styles/appStyle"
+import { RPH, RPW, phoneDevice } from "@/utils/dimensions"
+import { appStyle } from "@/styles/appStyle"
 import { useRouter } from "expo-router";
 
 // titleToSelectKey props => if the item is an object without a "title" key, the key with the value of the title to display

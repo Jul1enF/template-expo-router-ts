@@ -1,12 +1,12 @@
 import { ScrollView } from "react-native"
 import { Dispatch, ReactNode, SetStateAction } from "react"
 
-import { appStyle } from "@styles/appStyle"
+import { appStyle } from "@/styles/appStyle"
 
 import Modal from "react-native-modal"
-import useLayoutSpaces from "@hooks/useLayoutSpaces"
-import GoingBackHeader from "@components/ui/GoingBackHeader";
-import { AutocompleteProvider } from "@components/ui/Autocomplete/AutocompleteProvider";
+import useLayoutSpaces from "@/hooks/useLayoutSpaces"
+import GoingBackHeader from "@/components/ui/GoingBackHeader";
+import { AutocompleteProvider } from "@/components/ui/Autocomplete/AutocompleteProvider";
 // import { KeyboardProvider } from "react-native-keyboard-controller";
 
 

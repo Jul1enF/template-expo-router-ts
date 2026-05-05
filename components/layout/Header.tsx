@@ -11,9 +11,9 @@ import ForcedUpdateModal from "./ForcedUpdateModal";
 import SearchModal from "./SearchModal";
 
 import { useState } from 'react'
-import useLayoutSpaces from "@hooks/useLayoutSpaces"
-import { RPH, RPW, phoneDevice } from "@utils/dimensions"
-import { appStyle } from "@styles/appStyle";
+import useLayoutSpaces from "@/hooks/useLayoutSpaces"
+import { RPH, RPW, phoneDevice } from "@/utils/dimensions"
+import { appStyle } from "@/styles/appStyle";
 
 
 type HeaderProps = NativeStackHeaderProps & { appObsolete : boolean}

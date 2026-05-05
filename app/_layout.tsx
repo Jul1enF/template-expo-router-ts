@@ -2,10 +2,10 @@ import { Stack } from "expo-router";
 import { useEffect } from "react";
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { phoneDevice } from "../utils/dimensions"
-import Header from "@components/layout/Header";
-import useIsAppObsolete from "@hooks/useIsAppObsolete";
-import useRestartApp from "@hooks/useRestartApp";
-import { AutocompleteProvider } from "@components/ui/Autocomplete/AutocompleteProvider";
+import Header from "@/components/layout/Header";
+import useIsAppObsolete from "@/hooks/useIsAppObsolete";
+import useRestartApp from "@/hooks/useRestartApp";
+import { AutocompleteProvider } from "@/components/ui/Autocomplete/AutocompleteProvider";
 
 import { Provider } from 'react-redux';
 import { store } from "store/store";

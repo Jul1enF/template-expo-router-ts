@@ -2,8 +2,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
-import { RPH, RPW, phoneDevice } from '@utils/dimensions'
-import { appStyle } from '@styles/appStyle';
+import { RPH, RPW, phoneDevice } from '@/utils/dimensions'
+import { appStyle } from '@/styles/appStyle';
 
 type GoingBackHeaderProps = {back? : boolean; previousPage? : string ; previousPageName? : string; leftFunction? : ()=> void}
 

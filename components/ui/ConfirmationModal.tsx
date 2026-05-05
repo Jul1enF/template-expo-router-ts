@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
-import useLayoutSpaces from "@hooks/useLayoutSpaces";
+import useLayoutSpaces from "@/hooks/useLayoutSpaces";
 import Modal from "react-native-modal"
-import Button from "@components/ui/Button";
+import Button from "@/components/ui/Button";
 
-import { RPH, RPW, phoneDevice } from '@utils/dimensions'
-import { appStyle } from '@styles/appStyle';
+import { RPH, RPW, phoneDevice } from '@/utils/dimensions'
+import { appStyle } from '@/styles/appStyle';
 
 // TYPES
 

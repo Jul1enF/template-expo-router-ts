@@ -3,10 +3,10 @@ import { useState, Dispatch, SetStateAction } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Modal from "react-native-modal"
-import { RPH, RPW, phoneDevice } from "@utils/dimensions"
-import { appStyle } from "@styles/appStyle";
+import { RPH, RPW, phoneDevice } from "@/utils/dimensions"
+import { appStyle } from "@/styles/appStyle";
 import { useRouter } from "expo-router";
-import MyTextInput from "@components/ui/MyTextInput";
+import MyTextInput from "@/components/ui/MyTextInput";
 
 type SearchModalProps = {
     searchVisible : boolean, setSearchVisible : Dispatch<SetStateAction<boolean>>, screenWidth : number, screenHeight : number, modalOffsetTop : number

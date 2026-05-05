@@ -1,6 +1,6 @@
 import { TextInput, View, StyleSheet, Text, Platform, StyleProp, ViewStyle, TextStyle, TextInputProps } from "react-native";
 import { RefObject, useRef, useState, ReactNode } from "react";
-import { appStyle } from "@styles/appStyle";
+import { appStyle } from "@/styles/appStyle";
 
 
 // IF USED WITH ICONS AS CHILDREN, THE PARENT MUST NOT HAVE alignItems : "strech"

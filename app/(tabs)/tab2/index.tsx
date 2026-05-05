@@ -1,10 +1,10 @@
 import { StyleSheet, Text, ScrollView, View } from 'react-native';
 import { useState } from 'react';
-import GoingBackHeader from '@components/ui/GoingBackHeader';
-import Autocomplete from '@components/ui/Autocomplete/Autocomplete';
+import GoingBackHeader from '@/components/ui/GoingBackHeader';
+import Autocomplete from '@/components/ui/Autocomplete/Autocomplete';
 
-import { RPH, RPW } from '@utils/dimensions'
-import { appStyle } from '@styles/appStyle';
+import { RPH, RPW } from '@/utils/dimensions'
+import { appStyle } from '@/styles/appStyle';
 
 export default function Tab2Page() {
 

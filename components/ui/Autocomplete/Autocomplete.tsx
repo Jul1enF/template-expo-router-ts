@@ -2,13 +2,13 @@ import { View, TouchableOpacity, StyleSheet, Pressable, Animated, Easing, TextIn
 import { useState, useEffect, useRef, useMemo } from "react";
 import MyTextInput from "../MyTextInput";
 import { useDropdownProps } from "./AutocompleteProvider";
-import { AutocompleteProps } from "@components/ui/Autocomplete/Autocomplete.types";
-import { itemHasKey, itemHasStringValue } from "@utils/typeGuards";
+import { AutocompleteProps } from "@/components/ui/Autocomplete/Autocomplete.types";
+import { itemHasKey, itemHasStringValue } from "@/utils/typeGuards";
 
 import { findSelectedItemTitle, createId } from "./AutocompleteUtils";
 
-import { RPH, RPW, phoneDevice } from '@utils/dimensions'
-import { appStyle } from '@styles/appStyle';
+import { RPH, RPW, phoneDevice } from '@/utils/dimensions'
+import { appStyle } from '@/styles/appStyle';
 
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';

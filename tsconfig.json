@@ -5,13 +5,13 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@styles/*": ["styles/*"],
-      "@components/*": ["components/*"],
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"],
-      "@reducers/*": ["reducers/*"],
-      "@store/*" : ["store/*"],
-      "@app-types/*" : ["types/*"],
+      "@/styles/*": ["styles/*"],
+      "@/components/*": ["components/*"],
+      "@/utils/*": ["utils/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/reducers/*": ["reducers/*"],
+      "@/store/*" : ["store/*"],
+      "@/app-types/*" : ["types/*"],
     }
   },
   "exclude": ["node_modules", "babel.config.js"]

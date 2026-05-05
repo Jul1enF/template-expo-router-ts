@@ -2,10 +2,10 @@ import { View, FlatList, Text, StyleSheet, TouchableOpacity } from "react-native
 import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import useDropdownPosition from "./useDropdownPosition";
 
-import { RPH, RPW, phoneDevice } from '@utils/dimensions'
-import { appStyle } from '@styles/appStyle';
+import { RPH, RPW, phoneDevice } from '@/utils/dimensions'
+import { appStyle } from '@/styles/appStyle';
 import { DropDownProps, AutocompleteItem, ScreenLocationType } from "./Autocomplete.types";
-import { itemHasKey, itemHasStringValue } from "@utils/typeGuards";
+import { itemHasKey, itemHasStringValue } from "@/utils/typeGuards";
 
 type PressTypes = {
     pressLocation: null | ScreenLocationType;

@@ -1,6 +1,6 @@
 import { Platform, Dimensions, AppState } from "react-native";
 import { useEffect, useRef } from "react";
-import { phoneDevice, RPW, RPH } from "@utils/dimensions";
+import { phoneDevice, RPW, RPH } from "@/utils/dimensions";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import Constants from 'expo-constants';
 

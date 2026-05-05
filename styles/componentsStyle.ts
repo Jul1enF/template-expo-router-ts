@@ -1,4 +1,4 @@
-import { RPH, RPW, phoneDevice } from '@utils/dimensions'
+import { RPH, RPW, phoneDevice } from '@/utils/dimensions'
 import { ViewStyle, TextStyle } from 'react-native'
 import { colorsStyle } from './colorsStyle'
 import { fontsStyle } from './fontsStyle'

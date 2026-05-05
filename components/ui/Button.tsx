@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
-import { appStyle } from '@styles/appStyle';
+import { appStyle } from '@/styles/appStyle';
 
 
 // TYPES

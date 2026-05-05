@@ -1,4 +1,4 @@
-import { hasId, itemHasKey, itemHasStringValue } from "@utils/typeGuards"
+import { hasId, itemHasKey, itemHasStringValue } from "@/utils/typeGuards"
 import { FindSelectItemTitleOptions } from "./Autocomplete.types"
 
 
